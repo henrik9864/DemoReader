@@ -8,7 +8,7 @@ namespace DemoReader
 {
 	public class Demo
 	{
-		DemoHeader Header { get; }
+		DemoHeader Header { get; init; }
 
 		public static Demo Parse(string file)
 		{
@@ -17,14 +17,17 @@ namespace DemoReader
 			using (FileStream stream = new FileStream(file, FileMode.Open))
 			using (BinaryReader reader = new BinaryReader(stream))
 			{
-				header = new DemoHeader(reader);
+				header = DemoHeader.ReadHeader(reader);
 
 				Console.WriteLine(header.Protocol);
 				Console.WriteLine(header.NetworkProtocol);
 				Console.WriteLine((int)reader.ReadChar());
 			}
 
-			return new Demo();
+			return new Demo()
+			{
+				Header = header
+			};
 		}
 	}
 
